@@ -173,7 +173,7 @@
 		952C3A7C2C0BDC5B00DF2832 /* openvgdb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = openvgdb.sqlite; sourceTree = "<group>"; };
 		952C5E9B2C108F8C00DF2832 /* ArcadiaGBACore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ArcadiaGBACore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		952CF6812C0724C200DF2832 /* ArcadiaNESCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ArcadiaNESCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		95456BB22BE2ACA900113B8A /* Altea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Altea.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		95456BB22BE2ACA900113B8A /* Arcadia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Arcadia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95456BB52BE2ACA900113B8A /* ArcadiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaApp.swift; sourceTree = "<group>"; };
 		95456BB72BE2ACA900113B8A /* RunGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunGameView.swift; sourceTree = "<group>"; };
 		95456BB92BE2ACA900113B8A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -373,7 +373,7 @@
 		95456BB32BE2ACA900113B8A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				95456BB22BE2ACA900113B8A /* Altea.app */,
+				95456BB22BE2ACA900113B8A /* Arcadia.app */,
 				95456BC52BE2ACAC00113B8A /* ArcadiaTests.xctest */,
 				95456BCF2BE2ACAC00113B8A /* ArcadiaUITests.xctest */,
 			);
@@ -588,9 +588,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		95456BB12BE2ACA900113B8A /* Altea */ = {
+		95456BB12BE2ACA900113B8A /* Arcadia */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 95456BD92BE2ACAC00113B8A /* Build configuration list for PBXNativeTarget "Altea" */;
+			buildConfigurationList = 95456BD92BE2ACAC00113B8A /* Build configuration list for PBXNativeTarget "Arcadia" */;
 			buildPhases = (
 				95456BAE2BE2ACA900113B8A /* Sources */,
 				95456BAF2BE2ACA900113B8A /* Frameworks */,
@@ -601,9 +601,9 @@
 			);
 			dependencies = (
 			);
-			name = Altea;
+			name = Arcadia;
 			productName = iRetroApp;
-			productReference = 95456BB22BE2ACA900113B8A /* Altea.app */;
+			productReference = 95456BB22BE2ACA900113B8A /* Arcadia.app */;
 			productType = "com.apple.product-type.application";
 		};
 		95456BC42BE2ACAC00113B8A /* ArcadiaTests */ = {
@@ -679,7 +679,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				95456BB12BE2ACA900113B8A /* Altea */,
+				95456BB12BE2ACA900113B8A /* Arcadia */,
 				95456BC42BE2ACAC00113B8A /* ArcadiaTests */,
 				95456BCE2BE2ACAC00113B8A /* ArcadiaUITests */,
 			);
@@ -819,12 +819,12 @@
 /* Begin PBXTargetDependency section */
 		95456BC72BE2ACAC00113B8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 95456BB12BE2ACA900113B8A /* Altea */;
+			target = 95456BB12BE2ACA900113B8A /* Arcadia */;
 			targetProxy = 95456BC62BE2ACAC00113B8A /* PBXContainerItemProxy */;
 		};
 		95456BD12BE2ACAC00113B8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 95456BB12BE2ACA900113B8A /* Altea */;
+			target = 95456BB12BE2ACA900113B8A /* Arcadia */;
 			targetProxy = 95456BD02BE2ACAC00113B8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -958,14 +958,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Arcadia/Preview Content\"";
 				DEVELOPMENT_TEAM = 32DR4Q2NF7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Arcadia/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Altea;
+				INFOPLIST_KEY_CFBundleDisplayName = Arcadia;
 				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
 				INFOPLIST_KEY_GCSupportsGameMode = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -1013,14 +1013,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Arcadia/Preview Content\"";
 				DEVELOPMENT_TEAM = 32DR4Q2NF7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Arcadia/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Altea;
+				INFOPLIST_KEY_CFBundleDisplayName = Arcadia;
 				INFOPLIST_KEY_GCSupportsControllerUserInteraction = YES;
 				INFOPLIST_KEY_GCSupportsGameMode = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -1160,7 +1160,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		95456BD92BE2ACAC00113B8A /* Build configuration list for PBXNativeTarget "Altea" */ = {
+		95456BD92BE2ACAC00113B8A /* Build configuration list for PBXNativeTarget "Arcadia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				95456BDA2BE2ACAC00113B8A /* Debug */,

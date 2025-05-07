@@ -1,3 +1,10 @@
+# 1.7
+
+## Bug fixes
+
+- Fixed the Document Folder having one additional level (e.g. Documents/Arcadia)
+- Renamed the App to Arcadia as is not anymore on the App Store
+
 # 1.6
 
 ## Features

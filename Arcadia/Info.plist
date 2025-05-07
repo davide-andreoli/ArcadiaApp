@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -23,7 +23,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea NES Game File</string>
+			<string>Arcadia NES Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -37,7 +37,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Atari 2600 Game File</string>
+			<string>Arcadia Atari 2600 Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -50,7 +50,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Atari 7800 Game File</string>
+			<string>Arcadia Atari 7800 Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -63,7 +63,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -79,7 +79,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea GameBoy Advance Game File</string>
+			<string>Arcadia GameBoy Advance Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -91,7 +91,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Neo Geo Pocket Game File</string>
+			<string>Arcadia Neo Geo Pocket Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -104,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Master System Game File</string>
+			<string>Arcadia Master System Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -118,7 +118,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Game Gear Game File</string>
+			<string>Arcadia Game Gear Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -131,7 +131,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Genesis Game File</string>
+			<string>Arcadia Genesis Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -144,7 +144,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Mega Drive Game File</string>
+			<string>Arcadia Mega Drive Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -156,7 +156,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Pokemon Mini Game File</string>
+			<string>Arcadia Pokemon Mini Game File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -168,7 +168,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Altea Save File</string>
+			<string>Arcadia Save File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -195,7 +195,7 @@
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>Altea</string>
+			<string>Arcadia</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>ANY</string>
 		</dict>
@@ -211,7 +211,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -231,7 +231,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -251,7 +251,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -271,7 +271,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -291,7 +291,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -311,7 +311,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea SNES Game File</string>
+			<string>Arcadia SNES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -331,7 +331,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea NES Game File</string>
+			<string>Arcadia NES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -351,7 +351,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea NES Game File</string>
+			<string>Arcadia NES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -371,7 +371,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea NES Game File</string>
+			<string>Arcadia NES Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -391,7 +391,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Atari 2600 Game File</string>
+			<string>Arcadia Atari 2600 Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -411,7 +411,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Atari 7800 Game File</string>
+			<string>Arcadia Atari 7800 Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -431,7 +431,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -451,7 +451,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -471,7 +471,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -491,7 +491,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -511,7 +511,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Game File</string>
+			<string>Arcadia GameBoy Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -531,7 +531,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea GameBoy Advance Game File</string>
+			<string>Arcadia GameBoy Advance Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -591,7 +591,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Master System Game File</string>
+			<string>Arcadia Master System Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -611,7 +611,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Pokemon Mini File</string>
+			<string>Arcadia Pokemon Mini File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -631,7 +631,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Master System Game File</string>
+			<string>Arcadia Master System Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -651,7 +651,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Game Gear Game File</string>
+			<string>Arcadia Game Gear Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -671,7 +671,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Genesis Game File</string>
+			<string>Arcadia Genesis Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -692,7 +692,7 @@
 				<string>public.text</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Mega Drive Game File</string>
+			<string>Arcadia Mega Drive Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -712,7 +712,7 @@
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Bin Game File</string>
+			<string>Arcadia Bin Game File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
@@ -731,7 +731,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Altea Save File</string>
+			<string>Arcadia Save File</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>

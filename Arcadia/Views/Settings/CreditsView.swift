@@ -19,7 +19,7 @@ struct CreditsView: View {
             Section(header: Text("Cores")) {
                 //Text("Cores").font(.title)
                 Text("""
-                Altea is built on numerous cores developed by extraordinary developers who have made it possible to relive classic console experiences on other devices. In Arcadia, you will find the following cores:
+                Arcadia is built on numerous cores developed by extraordinary developers who have made it possible to relive classic console experiences on other devices. In Arcadia, you will find the following cores:
                 """)
                 ForEach(ArcadiaGameType.allCases) { gameType in
                     Text("• \(gameType.name): \(gameType.credits)")

@@ -59,12 +59,12 @@ enum ArcadiaCloudSyncStatus {
             }
         }
         */
-        return documentsDirectory.appendingPathComponent("Arcadia")
+        return documentsDirectory
         
     }
         
     var libraryMainDirectory: URL {
-        return libraryDirectory.appendingPathComponent("Arcadia")
+        return libraryDirectory
     }
     
     var gamesDirectory: URL {
@@ -94,7 +94,7 @@ enum ArcadiaCloudSyncStatus {
         }
 
     var iCloudDocumentsMainDirectory: URL? {
-        return iCloudDocumentsDirectory?.appendingPathComponent("Arcadia")
+        return iCloudDocumentsDirectory
         }
     
     private init() {

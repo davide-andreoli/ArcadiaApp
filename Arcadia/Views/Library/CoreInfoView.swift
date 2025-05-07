@@ -1,6 +1,6 @@
 //
 //  CoreInfoView.swift
-//  Altea
+//  Arcadia
 //
 //  Created by Davide Andreoli on 29/09/24.
 //

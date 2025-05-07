@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "95456BB12BE2ACA900113B8A"
-               BuildableName = "Altea.app"
-               BlueprintName = "Altea"
+               BuildableName = "Arcadia.app"
+               BlueprintName = "Arcadia"
                ReferencedContainer = "container:Arcadia.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "95456BB12BE2ACA900113B8A"
-            BuildableName = "Altea.app"
-            BlueprintName = "Altea"
+            BuildableName = "Arcadia.app"
+            BlueprintName = "Arcadia"
             ReferencedContainer = "container:Arcadia.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -93,8 +93,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "95456BB12BE2ACA900113B8A"
-            BuildableName = "Altea.app"
-            BlueprintName = "Altea"
+            BuildableName = "Arcadia.app"
+            BlueprintName = "Arcadia"
             ReferencedContainer = "container:Arcadia.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
