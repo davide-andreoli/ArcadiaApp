@@ -187,52 +187,52 @@
         }
       }
     },
-    "Altea and its emulators allow you to save your progress in two ways:\n\n• Saves: This is the standard way of saving your game progress, similar to the save files in game cartridges. These are generated and updated automatically by the app. Each game can have only one save file. This format is usually portable, and you can find these save files in Arcadia/Saves if you want to switch emulator apps.\n• States: This is a non-standard way of saving your game progress, enabled by the emulation process. It creates a snapshot of the game's exact state when you hit the save button. Each game can have up to three state files. This format is usually not portable as it depends on the emulator, but you can find these state files in Arcadia/States." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Altea e i suoi emulatori ti permettono di salvare i tuoi progressi in due modi:\n\n• Salvataggi: Questo è il modo standard di salvare i progressi di gioco, simile ai file di salvataggio nelle cartucce dei giochi, vengono generati e aggiornati automaticamente dall'app. Ogni gioco può avere un solo file di salvataggio. Questo formato è solitamente compatibile con altre applicazioni simili, li puoi trovare in Arcadia/Saves se desideri cambiare applicazione.\n• Stati: Questo è un modo non standard di salvare i progressi di gioco, abilitato dal processo di emulazione. Consiste nel creare uno snapshot dello stato esatto del gioco quando premi il pulsante di salvataggio. Ogni gioco può avere fino a tre file di stato. Questo formato può non essere compatibile al 100% poiché dipende dall'emulatore, ma li puoi trovare in Arcadia/States."
-          }
-        }
-      }
-    },
-    "Altea is a frontend for multiple emulators (also called cores), each corresponding to a different game system. Specifically, Altea is a frontend for the Libretro API, using the libretro versions of the cores. It aims to provide a simple and accessible way to enjoy retro game systems, not to replace RetroArch. If you are tech-savvy and want more control, consider using the RetroArch app.\n\nIn Altea, you'll find only one core per game system, selected by me based on various criteria. Customization of core options is not available (though this may change in future versions).\n" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Altea è un frontend per diversi emulatori (chiamati anche core), ognuno corrispondente a un diverso sistema di gioco. In particolare, Altea è un frontend per l'API Libretro, utilizzando le versioni Libretro dei core. Il suo obiettivo è fornire un modo semplice e accessibile per godersi i sistemi di gioco retro, non sostituire RetroArch. Se sei esperto di tecnologia e vuoi avere più controllo, considera l'uso dell'app RetroArch.\n\nIn Altea troverai solo un core per ogni sistema di gioco, selezionato da me in base a vari criteri. La personalizzazione delle opzioni del core non è disponibile (anche se questo potrebbe cambiare nelle future versioni)."
-          }
-        }
-      }
-    },
-    "Altea is a labor of love, born from my passion for Apple and my desire to learn new things. As such, it is an imperfect product developed in my free time. If you enjoy the app and would like to contribute to its development, here are some ways you can help:\n• Report any bugs you find, including steps to reproduce them.\n• Share any ideas for new features or improvements to enhance the user experience.\n• I am not a designer, so if you'd like to submit a custom app icon, I would love to include it in the app with credits to you.\n• If you are a retro game developer and would like for your game to be featured in the app, I'd love to include it.\n• Currently, Altea is closed source, but I plan to make it open source once I organize the repository better. When that happens, you'll be able to contribute directly to the code if you wish." : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Altea nasce dalla mia passione per i prodotti Apple e dal desiderio di imparare cose nuove.\nPertanto, è un prodotto imperfetto sviluppato nel mio tempo libero. Se ti piace l'app e desideri contribuire al suo sviluppo, ecco alcuni modi in cui puoi aiutare:\n• Segnala eventuali bug che trovi, includendo i passaggi per riprodurli.\n• Condividi qualsiasi idea per nuove funzionalità o miglioramenti per migliorare l'esperienza dell'utente.\n• Non sono un designer, quindi se desideri inviare un'icona personalizzata per l'app, mi piacerebbe includerla nell'app con i dovuti crediti.\n• Se sei uno sviluppatore di giochi retrò e ti piacerebbe che il tuo gioco fosse incluso nell'app, mi farebbe piacere aggiungerlo.\n• Attualmente, Altea è a codice chiuso, ma ho intenzione di renderlo open source una volta organizzato meglio il repository. Quando ciò accadrà, potrai contribuire direttamente al codice, se lo desideri."
-          }
-        }
-      }
-    },
-    "Altea is built on numerous cores developed by extraordinary developers who have made it possible to relive classic console experiences on other devices. In Arcadia, you will find the following cores:" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Altea è costruita su numerosi core sviluppati da straordinari sviluppatori che hanno reso possibile rivivere le esperienze delle console classiche su altri dispositivi. In Altea troverai i seguenti core:"
-          }
-        }
-      }
-    },
     "App Icon" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Icona dell'app"
+          }
+        }
+      }
+    },
+    "Arcadia and its emulators allow you to save your progress in two ways:\n\n• Saves: This is the standard way of saving your game progress, similar to the save files in game cartridges. These are generated and updated automatically by the app. Each game can have only one save file. This format is usually portable, and you can find these save files in Arcadia/Saves if you want to switch emulator apps.\n• States: This is a non-standard way of saving your game progress, enabled by the emulation process. It creates a snapshot of the game's exact state when you hit the save button. Each game can have up to three state files. This format is usually not portable as it depends on the emulator, but you can find these state files in Arcadia/States." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arcadia e i suoi emulatori ti permettono di salvare i tuoi progressi in due modi:\n\n• Salvataggi: Questo è il modo standard di salvare i progressi di gioco, simile ai file di salvataggio nelle cartucce dei giochi, vengono generati e aggiornati automaticamente dall'app. Ogni gioco può avere un solo file di salvataggio. Questo formato è solitamente compatibile con altre applicazioni simili, li puoi trovare in Arcadia/Saves se desideri cambiare applicazione.\n• Stati: Questo è un modo non standard di salvare i progressi di gioco, abilitato dal processo di emulazione. Consiste nel creare uno snapshot dello stato esatto del gioco quando premi il pulsante di salvataggio. Ogni gioco può avere fino a tre file di stato. Questo formato può non essere compatibile al 100% poiché dipende dall'emulatore, ma li puoi trovare in Arcadia/States."
+          }
+        }
+      }
+    },
+    "Arcadia is a frontend for multiple emulators (also called cores), each corresponding to a different game system. Specifically, Arcadia is a frontend for the Libretro API, using the libretro versions of the cores. It aims to provide a simple and accessible way to enjoy retro game systems, not to replace RetroArch. If you are tech-savvy and want more control, consider using the RetroArch app.\n\nIn Arcadia, you'll find only one core per game system, selected by me based on various criteria. Customization of core options is not available (though this may change in future versions).\n" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arcadia è un frontend per diversi emulatori (chiamati anche core), ognuno corrispondente a un diverso sistema di gioco. In particolare, Arcadia è un frontend per l'API Libretro, utilizzando le versioni Libretro dei core. Il suo obiettivo è fornire un modo semplice e accessibile per godersi i sistemi di gioco retro, non sostituire RetroArch. Se sei esperto di tecnologia e vuoi avere più controllo, considera l'uso dell'app RetroArch.\n\nIn Arcadia troverai solo un core per ogni sistema di gioco, selezionato da me in base a vari criteri. La personalizzazione delle opzioni del core non è disponibile (anche se questo potrebbe cambiare nelle future versioni)."
+          }
+        }
+      }
+    },
+    "Arcadia is a labor of love, born from my passion for Apple and my desire to learn new things. As such, it is an imperfect product developed in my free time. If you enjoy the app and would like to contribute to its development, here are some ways you can help:\n• Report any bugs you find, including steps to reproduce them.\n• Share any ideas for new features or improvements to enhance the user experience.\n• I am not a designer, so if you'd like to submit a custom app icon, I would love to include it in the app with credits to you.\n• If you are a retro game developer and would like for your game to be featured in the app, I'd love to include it.\n• Currently, Arcadia is closed source, but I plan to make it open source once I organize the repository better. When that happens, you'll be able to contribute directly to the code if you wish." : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arcadia nasce dalla mia passione per i prodotti Apple e dal desiderio di imparare cose nuove.\nPertanto, è un prodotto imperfetto sviluppato nel mio tempo libero. Se ti piace l'app e desideri contribuire al suo sviluppo, ecco alcuni modi in cui puoi aiutare:\n• Segnala eventuali bug che trovi, includendo i passaggi per riprodurli.\n• Condividi qualsiasi idea per nuove funzionalità o miglioramenti per migliorare l'esperienza dell'utente.\n• Non sono un designer, quindi se desideri inviare un'icona personalizzata per l'app, mi piacerebbe includerla nell'app con i dovuti crediti.\n• Se sei uno sviluppatore di giochi retrò e ti piacerebbe che il tuo gioco fosse incluso nell'app, mi farebbe piacere aggiungerlo.\n• Attualmente, Arcadia è a codice chiuso, ma ho intenzione di renderlo open source una volta organizzato meglio il repository. Quando ciò accadrà, potrai contribuire direttamente al codice, se lo desideri."
+          }
+        }
+      }
+    },
+    "Arcadia is built on numerous cores developed by extraordinary developers who have made it possible to relive classic console experiences on other devices. In Arcadia, you will find the following cores:" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arcadia è costruita su numerosi core sviluppati da straordinari sviluppatori che hanno reso possibile rivivere le esperienze delle console classiche su altri dispositivi. In Arcadia troverai i seguenti core:"
           }
         }
       }
@@ -317,12 +317,12 @@
         }
       }
     },
-    "By default, iCloud synchronization is disabled, but you can enable it in the settings. Once activated, all your local content will be uploaded to iCloud. If the local files have a more recent modification date than those in iCloud, they will overwrite the existing files in the cloud. For example, if you have a recent save file for a game and enable iCloud sync, that save file will be uploaded and replace the existing file in iCloud.\nIf you decide to turn off iCloud synchronization, all files stored in iCloud will be downloaded to your local folder.\nWhen iCloud sync is enabled, the iCloud Drive Altea folder is updated through two processes: periodic syncs and specific actions.\nDuring periodic syncs, the iCloud Drive Altea folder acts as the master. If the iCloud folder contains a file that the local folder does not, it will be downloaded. Conversely, if the local folder contains a file not present in the iCloud folder, it will be deleted. All files that exist in both locations will be kept in sync, with the most recent versions replacing older ones.\nSpecific actions, such as loading or deleting a game, will update the master reference each time they are performed." : {
+    "By default, iCloud synchronization is disabled, but you can enable it in the settings. Once activated, all your local content will be uploaded to iCloud. If the local files have a more recent modification date than those in iCloud, they will overwrite the existing files in the cloud. For example, if you have a recent save file for a game and enable iCloud sync, that save file will be uploaded and replace the existing file in iCloud.\nIf you decide to turn off iCloud synchronization, all files stored in iCloud will be downloaded to your local folder.\nWhen iCloud sync is enabled, the iCloud Drive Arcadia folder is updated through two processes: periodic syncs and specific actions.\nDuring periodic syncs, the iCloud Drive Arcadia folder acts as the master. If the iCloud folder contains a file that the local folder does not, it will be downloaded. Conversely, if the local folder contains a file not present in the iCloud folder, it will be deleted. All files that exist in both locations will be kept in sync, with the most recent versions replacing older ones.\nSpecific actions, such as loading or deleting a game, will update the master reference each time they are performed." : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Di default, la sincronizzazione di iCloud è disabilitata, ma puoi attivarla nelle impostazioni. Una volta attivata, tutti i tuoi contenuti locali verranno caricati su iCloud. Se i file locali hanno una data di modifica più recente rispetto a quelli su iCloud, sovrascriveranno i file esistenti nel cloud. Ad esempio, se hai un file di salvataggio recente di un gioco e abiliti la sincronizzazione con iCloud, quel file di salvataggio verrà caricato e sostituirà il file esistente su iCloud.\nSe decidi di disattivare la sincronizzazione di iCloud, tutti i file memorizzati su iCloud verranno scaricati nella tua cartella locale.\nQuando la sincronizzazione di iCloud è abilitata, la cartella Altea di iCloud Drive viene aggiornata tramite due processi: sincronizzazioni periodiche e azioni specifiche. \nDurante le sincronizzazioni periodiche, la cartella Altea di iCloud Drive agisce come riferimento principale. Se la cartella iCloud contiene un file che la cartella locale non ha, questo verrà scaricato. Al contrario, se la cartella locale contiene un file non presente nella cartella iCloud, verrà eliminato. Tutti i file presenti in entrambe le posizioni verranno mantenuti sincronizzati, con le versioni più recenti che sostituiranno quelle meno recenti.\n\nAzioni specifiche, come il caricamento o l'eliminazione di un gioco, aggiorneranno il riferimento principale ogni volta che vengono eseguite."
+            "value" : "Di default, la sincronizzazione di iCloud è disabilitata, ma puoi attivarla nelle impostazioni. Una volta attivata, tutti i tuoi contenuti locali verranno caricati su iCloud. Se i file locali hanno una data di modifica più recente rispetto a quelli su iCloud, sovrascriveranno i file esistenti nel cloud. Ad esempio, se hai un file di salvataggio recente di un gioco e abiliti la sincronizzazione con iCloud, quel file di salvataggio verrà caricato e sostituirà il file esistente su iCloud.\nSe decidi di disattivare la sincronizzazione di iCloud, tutti i file memorizzati su iCloud verranno scaricati nella tua cartella locale.\nQuando la sincronizzazione di iCloud è abilitata, la cartella Arcadia di iCloud Drive viene aggiornata tramite due processi: sincronizzazioni periodiche e azioni specifiche. \nDurante le sincronizzazioni periodiche, la cartella Arcadia di iCloud Drive agisce come riferimento principale. Se la cartella iCloud contiene un file che la cartella locale non ha, questo verrà scaricato. Al contrario, se la cartella locale contiene un file non presente nella cartella iCloud, verrà eliminato. Tutti i file presenti in entrambe le posizioni verranno mantenuti sincronizzati, con le versioni più recenti che sostituiranno quelle meno recenti.\n\nAzioni specifiche, come il caricamento o l'eliminazione di un gioco, aggiorneranno il riferimento principale ogni volta che vengono eseguite."
           }
         }
       }
@@ -797,12 +797,12 @@
         }
       }
     },
-    "I might explore custom interfaces in the future, but not right now.\n\nAltea supports local multiplayer for games designed for more than two players. In the settings or from the in-game menu (accessible by clicking the Altea button), you can see the player mapped for touch input and each game controller, if connected. By default, touch input controls player one, the first controller controls player one, and each additional controller controls the next available player.\n" : {
+    "I might explore custom interfaces in the future, but not right now.\n\nArcadia supports local multiplayer for games designed for more than two players. In the settings or from the in-game menu (accessible by clicking the Arcadia button), you can see the player mapped for touch input and each game controller, if connected. By default, touch input controls player one, the first controller controls player one, and each additional controller controls the next available player.\n" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Potrei esplorare interfacce personalizzate in futuro, ma non al momento.\n\nAltea supporta il multiplayer locale per i giochi progettati per più di due giocatori. Nelle impostazioni o dal menu di gioco (accessibile cliccando sul pulsante Altea), puoi vedere i giocatori associati al controllo touch e a ciascun controller di gioco, se collegato. Per impostazione predefinita, i controlli touch gestiscono il giocatore uno, il primo controller gestisce il giocatore uno e ogni controller aggiuntivo gestisce il giocatore successivo disponibile."
+            "value" : "Potrei esplorare interfacce personalizzate in futuro, ma non al momento.\n\nArcadia supporta il multiplayer locale per i giochi progettati per più di due giocatori. Nelle impostazioni o dal menu di gioco (accessibile cliccando sul pulsante Arcadia), puoi vedere i giocatori associati al controllo touch e a ciascun controller di gioco, se collegato. Per impostazione predefinita, i controlli touch gestiscono il giocatore uno, il primo controller gestisce il giocatore uno e ogni controller aggiuntivo gestisce il giocatore successivo disponibile."
           }
         }
       }
@@ -857,12 +857,12 @@
         }
       }
     },
-    "In the featured games section you'll find some game provided by some developers who decided to partner with Altea to distribute their games through the app.\nAside from those, there are many online resources to guide you in dumping game cartridges into ROMs, acquiring ROMs, or finding homebrew games.\n" : {
+    "In the featured games section you'll find some game provided by some developers who decided to partner with Arcadia to distribute their games through the app.\nAside from those, there are many online resources to guide you in dumping game cartridges into ROMs, acquiring ROMs, or finding homebrew games.\n" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nella sezione dei giochi in evidenza troverai alcuni titoli forniti da sviluppatori che hanno deciso di collaborare con Altea per distribuire i loro giochi tramite l'app.  \nOltre a questi, esistono molte risorse online che ti possono guidare nel trasferimento delle cartucce di gioco in ROM, nell'acquisizione di ROM o nel trovare giochi homebrew."
+            "value" : "Nella sezione dei giochi in evidenza troverai alcuni titoli forniti da sviluppatori che hanno deciso di collaborare con Arcadia per distribuire i loro giochi tramite l'app.  \nOltre a questi, esistono molte risorse online che ti possono guidare nel trasferimento delle cartucce di gioco in ROM, nell'acquisizione di ROM o nel trovare giochi homebrew."
           }
         }
       }
@@ -1737,12 +1737,12 @@
         }
       }
     },
-    "The first time Altea starts, it will create a folder to store all documents. On a Mac, you can find this inside the Documents folder, and on an iPhone, in the Files app.\n\nInside, you'll find a Games folder, a Saves folder, and a States folder. The app's game library will display all files in the Games folder with their respective names. Each game has one save and one state, and all files should share the same name. If you rename the games through the app, everything will be managed for you. If you rename them manually, ensure you also rename the saves and states.\n" : {
+    "The first time Arcadia starts, it will create a folder to store all documents. On a Mac, you can find this inside the Documents folder, and on an iPhone, in the Files app.\n\nInside, you'll find a Games folder, a Saves folder, and a States folder. The app's game library will display all files in the Games folder with their respective names. Each game has one save and one state, and all files should share the same name. If you rename the games through the app, everything will be managed for you. If you rename them manually, ensure you also rename the saves and states.\n" : {
       "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La prima volta che Altea viene avviata, creerà una cartella per memorizzare tutti i documenti. Su un Mac, puoi trovarla all'interno della cartella Documenti, e su un iPhone, nell'app File.\n\nAll'interno, troverai una cartella Giochi, una cartella Salvataggi e una cartella Stati. La libreria di giochi dell'app mostrerà tutti i file nella cartella Giochi con i rispettivi nomi. Ogni gioco ha un salvataggio e uno stato, e tutti i file devono avere lo stesso nome. Se rinomini i giochi tramite l'app, tutto sarà gestito automaticamente. Se li rinomini manualmente, assicurati di rinominare anche i salvataggi e gli stati."
+            "value" : "La prima volta che Arcadia viene avviata, creerà una cartella per memorizzare tutti i documenti. Su un Mac, puoi trovarla all'interno della cartella Documenti, e su un iPhone, nell'app File.\n\nAll'interno, troverai una cartella Giochi, una cartella Salvataggi e una cartella Stati. La libreria di giochi dell'app mostrerà tutti i file nella cartella Giochi con i rispettivi nomi. Ogni gioco ha un salvataggio e uno stato, e tutti i file devono avere lo stesso nome. Se rinomini i giochi tramite l'app, tutto sarà gestito automaticamente. Se li rinomini manualmente, assicurati di rinominare anche i salvataggi e gli stati."
           }
         }
       }
