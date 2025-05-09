@@ -121,8 +121,11 @@ struct RunGameView: View {
             //inputController.unloadGameConfiguration()
             emulationState.pauseEmulation()
             if useiCloudSync {
+                //TODO: Check if TaskGroup is better here
                 for memoryType in gameType.supportedSaveFiles.keys {
-                    cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    Task {
+                        await cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    }
                 }
             }
 
@@ -136,7 +139,10 @@ struct RunGameView: View {
                 emulationState.pauseEmulation()
                 if useiCloudSync {
                     for memoryType in gameType.supportedSaveFiles.keys {
-                        cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                        //TODO: Check if TaskGroup is better here
+                        Task {
+                            await cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                        }
                     }
                 }
                 default:
@@ -147,7 +153,10 @@ struct RunGameView: View {
         .onReceive(timer) { _ in
             if useiCloudSync {
                 for memoryType in gameType.supportedSaveFiles.keys {
-                    cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    //TODO: Check if TaskGroup is better here
+                    Task {
+                        await cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    }
                 }
             }
         }

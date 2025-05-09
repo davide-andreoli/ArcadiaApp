@@ -35,7 +35,9 @@ struct OverlayView: View {
                         Button(
                             action: {
                                 ArcadiaCoreEmulationState.sharedInstance.currentCore?.saveState(saveFileURL: ArcadiaCoreEmulationState.sharedInstance.currentStateURL[stateSlot]!)
-                                    cloudSyncManager.createCloudCopy(of: ArcadiaCoreEmulationState.sharedInstance.currentStateURL[stateSlot]!)
+                                Task {
+                                    await cloudSyncManager.createCloudCopy(of: ArcadiaCoreEmulationState.sharedInstance.currentStateURL[stateSlot]!)
+                                }
                                 dismiss()
                             }) {
                             Text("Save State")

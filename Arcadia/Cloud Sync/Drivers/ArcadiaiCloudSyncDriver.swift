@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum ArcadiaCloudSyncError: Error {
+    case error
+}
+
 struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     
     var iCloudDocumentsDirectory: URL? {
@@ -17,52 +21,44 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
         return iCloudDocumentsDirectory
         }
     
-    func copyFileToCloud(file: URL) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            
-            if !FileManager.default.fileExists(atPath: file.path) {
-                return
-            }
-            
-            let iCloudSubDirectory = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)])
-            
-            let iCloudFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
-            
-            
-            do {
-                try FileManager.default.createDirectory(at: iCloudSubDirectory, withIntermediateDirectories: true, attributes: nil)
-                
-                if FileManager.default.fileExists(atPath: iCloudFileURL.path) {
-                    let localAttributes = try FileManager.default.attributesOfItem(atPath: file.path)
-                    let iCloudAttributes = try FileManager.default.attributesOfItem(atPath: iCloudFileURL.path)
-                    
-                    if let localDate = localAttributes[.modificationDate] as? Date,
-                       let iCloudDate = iCloudAttributes[.modificationDate] as? Date {
-                        if iCloudDate > localDate {
-                            print("Local file is less recent, skipping")
-                            return
-                        } else {
-                            try FileManager.default.removeItem(at: iCloudFileURL)
-                        }
-                    }
-                }
-                try FileManager.default.copyItem(at: file, to: iCloudFileURL)
-            } catch {
-                print("Could not copy \(error)")
+    func copyFileToCloud(file: URL) async throws {
+        guard let iCloudURL = iCloudDocumentsMainDirectory else {
+            throw ArcadiaCloudSyncError.error
+        }
+
+        if !FileManager.default.fileExists(atPath: file.path) {
+            throw ArcadiaCloudSyncError.error
+        }
+
+        let iCloudSubDirectory = iCloudURL
+            .appendingPathComponent(file.pathComponents[file.pathComponents.endIndex - 3])
+            .appendingPathComponent(file.pathComponents[file.pathComponents.endIndex - 2])
+
+        let iCloudFileURL = iCloudSubDirectory.appendingPathComponent(file.lastPathComponent)
+
+        try FileManager.default.createDirectory(at: iCloudSubDirectory, withIntermediateDirectories: true)
+
+        if FileManager.default.fileExists(atPath: iCloudFileURL.path) {
+            let localDate = try FileManager.default.attributesOfItem(atPath: file.path)[.modificationDate] as? Date
+            let iCloudDate = try FileManager.default.attributesOfItem(atPath: iCloudFileURL.path)[.modificationDate] as? Date
+
+            if let localDate, let iCloudDate, iCloudDate > localDate {
+                return // Skip copy
+            } else {
+                try FileManager.default.removeItem(at: iCloudFileURL)
             }
         }
+
+        try FileManager.default.copyItem(at: file, to: iCloudFileURL)
     }
+
     
-    func downloadFileFromCloud(localFileURL: URL) {
+    func downloadFileFromCloud(localFileURL: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
         
-        DispatchQueue.global(qos: .userInteractive).async {
+
             let iCloudFileURL = iCloudURL.appendingPathComponent(localFileURL.pathComponents[localFileURL.pathComponents.index(localFileURL.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(localFileURL.pathComponents[localFileURL.pathComponents.index(localFileURL.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(localFileURL.lastPathComponent)
             print(iCloudFileURL)
             
@@ -75,16 +71,16 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
                     print("Could not delete")
                 }
             }
-        }
+        
         
     }
     
-    func deleteFileFromCloud(file: URL) {
+    func deleteFileFromCloud(file: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
         
-        DispatchQueue.global(qos: .userInteractive).async {
+
             let iCloudFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
             print(iCloudFileURL)
             
@@ -95,15 +91,15 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
                     print("Could not delete")
                 }
             }
-        }
+        
     }
     
-    func renameFileInCloud(file: URL, to newFile: URL) {
+    func renameFileInCloud(file: URL, to newFile: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
         
-        DispatchQueue.global(qos: .userInteractive).async {
+
                                     
             let iCloudOldFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
             
@@ -120,10 +116,10 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
             } catch {
                 print("Could not rename \(error)")
             }
-        }
+        
     }
     
-    func copyFolderToCloud(folder: URL) {
+    func copyFolderToCloud(folder: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
@@ -173,7 +169,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
         }
     }
     
-    func downloadFolderFromCloud(folder: URL) {
+    func downloadFolderFromCloud(folder: URL) async throws {
         
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
@@ -224,7 +220,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
         }
     }
     
-    func syncFolderToCloud(folder: URL) {
+    func syncFolderToCloud(folder: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
@@ -305,7 +301,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     }
 
     
-    func getStatusOfFilesInCloudFolder(localFolderURL: URL) {}
+    func getStatusOfFilesInCloudFolder(localFolderURL: URL) async throws {}
     
     
 }

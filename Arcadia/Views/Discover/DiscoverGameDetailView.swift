@@ -40,7 +40,9 @@ struct DiscoverGameDetailView: View {
                     Spacer()
                     Button(action: {
                         if let gameURL = Bundle.main.url(forResource: game.game.name, withExtension: game.game.bundledFileExtension) {
-                            fileManager.saveGame(gameURL: gameURL, gameType: game.game.gameType)
+                            Task {
+                                await fileManager.saveGame(gameURL: gameURL, gameType: game.game.gameType)
+                            }
                             showLoadingSuccess.toggle()
                         }
                         

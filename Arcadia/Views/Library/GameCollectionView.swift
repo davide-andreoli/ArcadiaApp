@@ -71,7 +71,9 @@ struct GameCollectionView: View {
             .onAppear {
                 fileManager.getGamesURL(gameSystem: gameType)
                 navigationState.currentGameSystem = gameType
-                cloudSyncManager.syncDataToiCloud()
+                Task {
+                    await cloudSyncManager.syncDataToiCloud()
+                }
             }
             .onDisappear {
                 if gameType == navigationState.currentGameSystem {
@@ -80,7 +82,7 @@ struct GameCollectionView: View {
             }
             .refreshable {
                 fileManager.getGamesURL(gameSystem: gameType)
-                cloudSyncManager.syncDataToiCloud()
+                await cloudSyncManager.syncDataToiCloud()
             }
                 .toolbar() {
                     Button(action: { showingInfoView.toggle() }, label: {
@@ -102,7 +104,9 @@ struct GameCollectionView: View {
                         do {
                             let fileUrls = try result.get()
                             for fileUrl in fileUrls {
-                                fileManager.saveGame(gameURL: fileUrl, gameType: gameType)
+                                Task {
+                                    await fileManager.saveGame(gameURL: fileUrl, gameType: gameType)
+                                }
                             }
                         } catch {
                             DispatchQueue.main.async {

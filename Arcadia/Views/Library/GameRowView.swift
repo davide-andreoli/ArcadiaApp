@@ -70,7 +70,9 @@ struct GameRowView: View {
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             Button(role: .destructive) {
-                fileManager.deleteGame(gameURL: gameURL, gameType: gameType)
+                Task {
+                    await fileManager.deleteGame(gameURL: gameURL, gameType: gameType)
+                }
             } label: {
                 Label("Delete", systemImage: "trash.fill")
             }
@@ -94,7 +96,9 @@ struct GameRowView: View {
         }
         .contextMenu(menuItems: {
             Button(role: .destructive) {
-                fileManager.deleteGame(gameURL: gameURL, gameType: gameType)
+                Task {
+                    await fileManager.deleteGame(gameURL: gameURL, gameType: gameType)
+                }
             } label: {
                 Label("Delete", systemImage: "trash.fill")
             }
@@ -125,7 +129,9 @@ struct GameRowView: View {
                 Label("Change image", systemImage: "photo.artframe")
             }
             Button {
-                fileManager.redownloadDefaultImage(gameURL: gameURL, gameType: gameType)
+                Task {
+                    await fileManager.redownloadDefaultImage(gameURL: gameURL, gameType: gameType)
+                }
             } label: {
                 Label("Redownload default image", systemImage: "arrow.2.squarepath")
             }
@@ -133,8 +139,11 @@ struct GameRowView: View {
         .alert("Enter the new name", isPresented: $showingRenameAlert) {
             TextField("Enter the new game name", text: $newGameName)
             Button("Confirm", action: {
-                fileManager.renameGame(gameURL: gameURL, newName: newGameName, gameType: gameType)
-                newGameName = ""
+                Task {
+                    await fileManager.renameGame(gameURL: gameURL, newName: newGameName, gameType: gameType)
+                    newGameName = ""
+                }
+                
             })
             Button("Cancel", role: .cancel) {
                 newGameName = ""

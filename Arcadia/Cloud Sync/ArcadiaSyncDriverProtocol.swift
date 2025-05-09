@@ -8,21 +8,21 @@ import Foundation
 
 protocol ArcadiaSyncDriverProtocol {
     
-    func copyFileToCloud(file: URL)
+    func copyFileToCloud(file: URL) async throws
     
-    func downloadFileFromCloud(localFileURL: URL)
+    func downloadFileFromCloud(localFileURL: URL) async throws
     
-    func deleteFileFromCloud(file: URL)
+    func deleteFileFromCloud(file: URL) async throws
     
-    func renameFileInCloud(file: URL, to newFile: URL)
+    func renameFileInCloud(file: URL, to newFile: URL) async throws
     
-    func copyFolderToCloud(folder: URL)
+    func copyFolderToCloud(folder: URL) async throws
     
-    func downloadFolderFromCloud(folder: URL)
+    func downloadFolderFromCloud(folder: URL) async throws
     
-    func syncFolderToCloud(folder: URL)
+    func syncFolderToCloud(folder: URL) async throws
     
-    func getStatusOfFilesInCloudFolder(localFolderURL: URL)
+    func getStatusOfFilesInCloudFolder(localFolderURL: URL) async throws
     
 }
 

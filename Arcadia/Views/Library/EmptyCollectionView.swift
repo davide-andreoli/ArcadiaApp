@@ -34,7 +34,9 @@ struct EmptyCollectionView: View {
                 }
                 Button(action: {
                     fileManager.getGamesURL(gameSystem: gameType)
-                    cloudSyncManager.syncDataToiCloud()
+                    Task {
+                        await cloudSyncManager.syncDataToiCloud()
+                    }
                 }) {
                     Text("Refresh game list")
                 }
@@ -46,7 +48,7 @@ struct EmptyCollectionView: View {
         }
         .refreshable {
             fileManager.getGamesURL(gameSystem: gameType)
-            cloudSyncManager.syncDataToiCloud()
+            await cloudSyncManager.syncDataToiCloud()
             
         }
                 

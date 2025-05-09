@@ -94,11 +94,21 @@ import AppKit
                 print("Error creating folder")
             }
         }
-        
-        for folder in foldersToSync {
-            ArcadiaCloudSyncManager.shared.syncFolderToCloud(folder: folder)
-        }
 
+    }
+    
+    func cloudSyncSetup() async {
+        var foldersToSync = [URL]()
+        
+        for dir in [gamesDirectory, savesDirectory, statesDirectory, imagesDirectory, coresDirectory] {
+            for gameSystem in ArcadiaGameType.allCases {
+                let gameSystemFolder = dir.appendingPathComponent(gameSystem.rawValue)
+                foldersToSync.append(gameSystemFolder)
+            }
+        }
+        for folder in foldersToSync {
+            await ArcadiaCloudSyncManager.shared.syncFolderToCloud(folder: folder)
+        }
     }
     
     func getGamesURL(gameSystem: ArcadiaGameType) {
@@ -121,7 +131,7 @@ import AppKit
         }
     }
     
-    func importSaveFile(for gameURL: URL, saveURL: URL, gameType: ArcadiaGameType, needScope: Bool = true) {
+    func importSaveFile(for gameURL: URL, saveURL: URL, gameType: ArcadiaGameType, needScope: Bool = true) async {
         if needScope {
             if gameURL.startAccessingSecurityScopedResource()  {
                 defer {
@@ -133,7 +143,7 @@ import AppKit
                 do {
                     let saveFile = try Data(contentsOf: saveURL)
                     try saveFile.write(to: localSaveURL, options: .atomic)
-                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: localSaveURL)
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: localSaveURL)
                 } catch {
                     print("couldn't save file \(error)")
                 }
@@ -141,7 +151,7 @@ import AppKit
         }
     }
     
-    func saveGame(gameURL: URL, gameType: ArcadiaGameType, fromSheet: Bool = false) {
+    func saveGame(gameURL: URL, gameType: ArcadiaGameType, fromSheet: Bool = false) async {
 
             if gameURL.startAccessingSecurityScopedResource()  {
                 print("entering the scoping")
@@ -156,20 +166,12 @@ import AppKit
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
                     
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
-                        downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                            DispatchQueue.main.async {
-                                if let error = error {
-                                    print("Error: \(error.localizedDescription)")
-                                } else {
-                                    print("Image saved successfully")
-                                }
-                            }
-                        }
+                        try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
                     }
                     //To update the game list
                     getGamesURL(gameSystem: gameType)
@@ -185,20 +187,12 @@ import AppKit
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
 
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
-                        downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                            DispatchQueue.main.async {
-                                if let error = error {
-                                    print("Error: \(error.localizedDescription)")
-                                } else {
-                                    print("Image saved successfully")
-                                }
-                            }
-                        }
+                        try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
                     }
                     //To update the game list
                     if let currentGameSystem = ArcadiaNavigationState.shared.currentGameSystem {
@@ -217,13 +211,13 @@ import AppKit
 
     }
     
-    func importGameFromShare(gameURL : URL) {
+    func importGameFromShare(gameURL : URL) async {
         print(gameURL)
         let gameExtension = gameURL.pathExtension
         
         for gameType in ArcadiaGameType.allCases {
             if gameType.allowedExtensions.contains(UTType(filenameExtension: gameExtension)!) {
-                self.saveGame(gameURL: gameURL, gameType: gameType)
+                await self.saveGame(gameURL: gameURL, gameType: gameType)
                 self.showAlert = true
             }
         }
@@ -295,23 +289,20 @@ import AppKit
 
     }
     
-    func redownloadDefaultImage(gameURL: URL, gameType: ArcadiaGameType) {
+    func redownloadDefaultImage(gameURL: URL, gameType: ArcadiaGameType) async {
         if let boxArtPath = getGameFromURL(gameURL: gameURL) {
             guard let boxArtURL = URL(string: boxArtPath) else { return }
             print("Got boxULR :\(boxArtURL)")
-            downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        print("Error: \(error.localizedDescription)")
-                    } else {
-                        print("Image saved successfully")
-                    }
-                }
+            do {
+                try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
+            }
+            catch {
+                
             }
         }
     }
     
-    func deleteGame(gameURL: URL, gameType: ArcadiaGameType) {
+    func deleteGame(gameURL: URL, gameType: ArcadiaGameType) async {
         let imageURL = getImageURL(gameURL: gameURL, gameType: gameType)
         let saveURL = getSaveURL(gameURL: gameURL, gameType: gameType)
         let stateURL1 = getStateURL(gameURL: gameURL, gameType: gameType, slot: 1)
@@ -322,7 +313,7 @@ import AppKit
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 do {
                     try FileManager.default.removeItem(atPath: fileURL.path)
-                    ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: fileURL)
+                    await ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: fileURL)
                 } catch {
                     print("Could not delete")
                 }
@@ -332,7 +323,7 @@ import AppKit
         if FileManager.default.fileExists(atPath: gameURL.path) {
             do {
                 try FileManager.default.removeItem(atPath: gameURL.path)
-                ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: gameURL)
+                await ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: gameURL)
             } catch {
                 print("Could not delete")
             }
@@ -378,7 +369,7 @@ import AppKit
 
     }
     
-    func renameGame(gameURL: URL, newName: String, gameType: ArcadiaGameType) {
+    func renameGame(gameURL: URL, newName: String, gameType: ArcadiaGameType) async {
         let imageURL = getImageURL(gameURL: gameURL, gameType: gameType)
         let saveURL = getSaveURL(gameURL: gameURL, gameType: gameType)
         let stateURL1 = getStateURL(gameURL: gameURL, gameType: gameType, slot: 1)
@@ -400,7 +391,7 @@ import AppKit
                     print("Renaming \(oldURL.lastPathComponent) to \(newURL.lastPathComponent)")
                     try FileManager.default.moveItem(at: oldURL, to: newURL)
                     
-                    ArcadiaCloudSyncManager.shared.renameFileInCloud(file: oldURL, to: newURL)
+                    await ArcadiaCloudSyncManager.shared.renameFileInCloud(file: oldURL, to: newURL)
 
                     
                 } catch {
@@ -413,7 +404,7 @@ import AppKit
             do {
                 print("Renaming \(gameURL.lastPathComponent) to \(newGameURL.lastPathComponent)")
                 try FileManager.default.moveItem(at: gameURL, to: newGameURL)
-                ArcadiaCloudSyncManager.shared.renameFileInCloud(file: gameURL, to: newGameURL)
+                await ArcadiaCloudSyncManager.shared.renameFileInCloud(file: gameURL, to: newGameURL)
 
                 
             } catch {
@@ -555,62 +546,54 @@ import AppKit
        }
     
     
-    func downloadAndProcessImage(of gameURL: URL, from imageURL: URL, gameType: ArcadiaGameType, completion: @escaping (Error?) -> Void) {
-        
+    func downloadAndProcessImage(of gameURL: URL, from imageURL: URL, gameType: ArcadiaGameType) async throws {
         print("Trying to download from \(imageURL)")
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            if let error = error {
-                completion(error)
-                return
-            }
-            
-            print("Downloaded from \(imageURL)")
-            guard let data = data else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
-                return
-            }
-            
-            #if os(iOS)
-            guard let image = UIImage(data: data) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Unable to create image from data"]))
-                return
-            }
-            #elseif os(macOS)
-            guard let image = NSImage(data: data) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Unable to create image from data"]))
-                return
-            }
-            #endif
-            
-            let imageFileName = self.getImageURL(gameURL: gameURL, gameType: gameType)
-            
-            let resizedImage = self.resizeImage(image: image, toMaxDimension: 80)
-            print("Resized image")
-            
-            #if os(iOS)
-            guard let jpegData = resizedImage.jpegData(compressionQuality: 1.0) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Unable to convert image to JPEG"]))
-                return
-            }
-            #elseif os(macOS)
-            guard let tiffData = resizedImage.tiffRepresentation,
-                  let bitmap = NSBitmapImageRep(data: tiffData),
-                  let jpegData = bitmap.representation(using: .jpeg, properties: [:]) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Unable to convert image to JPEG"]))
-                return
-            }
-            #endif
-            
-            do {
-                print("Writing to \(imageFileName)")
-                try jpegData.write(to: imageFileName)
-                ArcadiaCloudSyncManager.shared.createCloudCopy(of: imageFileName)
-                completion(nil)
-            } catch {
-                completion(error)
-            }
-        }.resume()
+        
+        let (data, _) = try await URLSession.shared.data(from: imageURL)
+        
+        print("Downloaded from \(imageURL)")
+        
+        #if os(iOS)
+        guard let image = UIImage(data: data) else {
+            throw NSError(domain: "ImageProcessingError", code: 1001, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to create image from data"
+            ])
+        }
+        #elseif os(macOS)
+        guard let image = NSImage(data: data) else {
+            throw NSError(domain: "ImageProcessingError", code: 1001, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to create image from data"
+            ])
+        }
+        #endif
+
+        let imageFileName = self.getImageURL(gameURL: gameURL, gameType: gameType)
+        
+        let resizedImage = self.resizeImage(image: image, toMaxDimension: 80)
+        print("Resized image")
+        
+        #if os(iOS)
+        guard let jpegData = resizedImage.jpegData(compressionQuality: 1.0) else {
+            throw NSError(domain: "ImageProcessingError", code: 1002, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to convert image to JPEG"
+            ])
+        }
+        #elseif os(macOS)
+        guard let tiffData = resizedImage.tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiffData),
+              let jpegData = bitmap.representation(using: .jpeg, properties: [:]) else {
+            throw NSError(domain: "ImageProcessingError", code: 1002, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to convert image to JPEG"
+            ])
+        }
+        #endif
+
+        print("Writing to \(imageFileName)")
+        try jpegData.write(to: imageFileName)
+        
+        await ArcadiaCloudSyncManager.shared.createCloudCopy(of: imageFileName)
     }
+
 
     #if os(iOS)
     func resizeImage(image: UIImage, toMaxDimension maxDimension: CGFloat) -> UIImage {

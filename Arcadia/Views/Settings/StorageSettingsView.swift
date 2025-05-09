@@ -26,11 +26,15 @@ struct StorageSettingsView: View {
                 .onChange(of: useiCloudSync) { oldValue, newValue in
                     if newValue {
                         showOverlay = true
-                        cloudSyncManager.uploadFilesToiCloud()
+                        Task {
+                            await cloudSyncManager.uploadFilesToiCloud()
+                        }
                         showOverlay = false
                     } else {
                         showOverlay = true
-                        cloudSyncManager.downloadDataFromiCloud()
+                        Task {
+                            await cloudSyncManager.downloadDataFromiCloud()
+                        }
                         showOverlay = false
                     }
                 }
@@ -38,7 +42,9 @@ struct StorageSettingsView: View {
                     Text("\(cloudSyncManager.lastSyncStatus.textToShow)")
                 }
                 Button(action : {
-                    cloudSyncManager.syncDataToiCloud()
+                    Task {
+                        await cloudSyncManager.syncDataToiCloud()
+                    }
                 }) {
                     Text("Force sync")
                 }
