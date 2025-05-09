@@ -16,31 +16,10 @@ import UIKit
 import AppKit
 #endif
 
-enum ArcadiaCloudSyncStatus {
-    case syncing
-    case completed
-    case error
-    case notExecuted
-    
-    var textToShow: String {
-        switch self {
-        case .syncing:
-            return "Sync in progress"
-        case .completed:
-            return "Sync completed"
-        case .notExecuted:
-            return "Sync not yet executed"
-        case .error:
-            return "Error during last sync"
-        }
-    }
-}
-
 @Observable class ArcadiaFileManager {
     
     public static var shared = ArcadiaFileManager()
     public var currentGames: [URL] = []
-    public var lastSyncStatus: ArcadiaCloudSyncStatus = .notExecuted
     public var showAlert: Bool = false
     
     var documentsDirectory: URL {
@@ -52,13 +31,6 @@ enum ArcadiaCloudSyncStatus {
     }
     
     var documentsMainDirectory: URL {
-        /*
-        if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-            if iCloudSyncEnabled {
-                return iCloudDocumentsDirectory!.appendingPathComponent("Arcadia")
-            }
-        }
-        */
         return documentsDirectory
         
     }
@@ -123,16 +95,10 @@ enum ArcadiaCloudSyncStatus {
             }
         }
         
-        if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-            if iCloudSyncEnabled {
-                DispatchQueue.global(qos: .userInteractive).async {
-                    self.syncDataToiCloud(in: foldersToSync)
-                }
-            }
+        for folder in foldersToSync {
+            ArcadiaCloudSyncManager.shared.syncFolderToCloud(folder: folder)
         }
-        
-        
-        
+
     }
     
     func getGamesURL(gameSystem: ArcadiaGameType) {
@@ -167,11 +133,7 @@ enum ArcadiaCloudSyncStatus {
                 do {
                     let saveFile = try Data(contentsOf: saveURL)
                     try saveFile.write(to: localSaveURL, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: localSaveURL)
-                        }
-                    }
+                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: localSaveURL)
                 } catch {
                     print("couldn't save file \(error)")
                 }
@@ -194,11 +156,8 @@ enum ArcadiaCloudSyncStatus {
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: savePath)
-                        }
-                    }
+                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+                    
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
@@ -226,11 +185,8 @@ enum ArcadiaCloudSyncStatus {
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: savePath)
-                        }
-                    }
+                    ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
@@ -366,11 +322,7 @@ enum ArcadiaCloudSyncStatus {
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 do {
                     try FileManager.default.removeItem(atPath: fileURL.path)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            deleteCloudCopy(of: fileURL)
-                        }
-                    }
+                    ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: fileURL)
                 } catch {
                     print("Could not delete")
                 }
@@ -380,11 +332,7 @@ enum ArcadiaCloudSyncStatus {
         if FileManager.default.fileExists(atPath: gameURL.path) {
             do {
                 try FileManager.default.removeItem(atPath: gameURL.path)
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        deleteCloudCopy(of: gameURL)
-                    }
-                }
+                ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: gameURL)
             } catch {
                 print("Could not delete")
             }
@@ -452,11 +400,8 @@ enum ArcadiaCloudSyncStatus {
                     print("Renaming \(oldURL.lastPathComponent) to \(newURL.lastPathComponent)")
                     try FileManager.default.moveItem(at: oldURL, to: newURL)
                     
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            self.renameCloudCopy(of: oldURL, to: newURL)
-                        }
-                    }
+                    ArcadiaCloudSyncManager.shared.renameFileInCloud(file: oldURL, to: newURL)
+
                     
                 } catch {
                     print("Could not rename \(oldURL.lastPathComponent) to \(newURL.lastPathComponent)")
@@ -468,12 +413,8 @@ enum ArcadiaCloudSyncStatus {
             do {
                 print("Renaming \(gameURL.lastPathComponent) to \(newGameURL.lastPathComponent)")
                 try FileManager.default.moveItem(at: gameURL, to: newGameURL)
-                
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        self.renameCloudCopy(of: gameURL, to: newGameURL)
-                    }
-                }
+                ArcadiaCloudSyncManager.shared.renameFileInCloud(file: gameURL, to: newGameURL)
+
                 
             } catch {
                 print("Could not rename \(gameURL.lastPathComponent) to \(newGameURL.lastPathComponent)")
@@ -663,11 +604,7 @@ enum ArcadiaCloudSyncStatus {
             do {
                 print("Writing to \(imageFileName)")
                 try jpegData.write(to: imageFileName)
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        self.createCloudCopy(of: imageFileName)
-                    }
-                }
+                ArcadiaCloudSyncManager.shared.createCloudCopy(of: imageFileName)
                 completion(nil)
             } catch {
                 completion(error)
@@ -887,7 +824,6 @@ enum ArcadiaCloudSyncStatus {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
         else { return }
-        lastSyncStatus = .syncing
         
         let localURLs = folders
         for localURL in localURLs {
@@ -962,11 +898,9 @@ enum ArcadiaCloudSyncStatus {
                 }
                 
             } catch {
-                lastSyncStatus = .error
                 print("Error syncing data to iCloud: \(error)")
             }
         }
-        lastSyncStatus = .completed
     }
     
     func deleteCloudCopy(of file: URL) {

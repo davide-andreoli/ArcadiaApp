@@ -31,8 +31,10 @@ struct RunGameView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(ArcadiaCoreEmulationState.self) var emulationState: ArcadiaCoreEmulationState
     @Environment(ArcadiaFileManager.self) var fileManager: ArcadiaFileManager
+    @Environment(ArcadiaCloudSyncManager.self) var cloudSyncManager: ArcadiaCloudSyncManager
     @Environment(InputController.self) var inputController: InputController
     
+    // iCloudSync being enabled is check already by the manager, but I keep it here as well to make the game view more efficient and avoid unnecessary calls if cloud sync is disabled
     @AppStorage("iCloudSyncEnabled") private var useiCloudSync = false
     @AppStorage("hideButtons") private var hideButtons = false
     @AppStorage("customizeGameViewBackgroundColor") private var customizeGameViewBackgroundColor: Bool = false
@@ -120,7 +122,7 @@ struct RunGameView: View {
             emulationState.pauseEmulation()
             if useiCloudSync {
                 for memoryType in gameType.supportedSaveFiles.keys {
-                    fileManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
                 }
             }
 
@@ -134,7 +136,7 @@ struct RunGameView: View {
                 emulationState.pauseEmulation()
                 if useiCloudSync {
                     for memoryType in gameType.supportedSaveFiles.keys {
-                        fileManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                        cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
                     }
                 }
                 default:
@@ -145,7 +147,7 @@ struct RunGameView: View {
         .onReceive(timer) { _ in
             if useiCloudSync {
                 for memoryType in gameType.supportedSaveFiles.keys {
-                    fileManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
+                    cloudSyncManager.createCloudCopy(of: fileManager.getSaveURL(gameURL: gameURL, gameType: gameType, memoryType: memoryType))
                 }
             }
         }

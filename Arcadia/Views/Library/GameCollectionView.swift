@@ -21,12 +21,12 @@ struct GameCollectionView: View {
     @State private var goToGameView : Bool = false
     @State private var searchText: String = ""
     @Binding private var path: NavigationPath
-    @AppStorage("iCloudSyncEnabled") private var useiCloudSync = false
     @FocusState private var selectedGame: URL?
     @FocusState private var selectedGameIndex: Int?
 
     
     @Environment(ArcadiaFileManager.self) var fileManager: ArcadiaFileManager
+    @Environment(ArcadiaCloudSyncManager.self) var cloudSyncManager: ArcadiaCloudSyncManager
     @Environment(ArcadiaCoreEmulationState.self) var emulationState: ArcadiaCoreEmulationState
     @Environment(ArcadiaNavigationState.self) var navigationState: ArcadiaNavigationState
     @Environment(InputController.self) var inputController: InputController
@@ -71,9 +71,7 @@ struct GameCollectionView: View {
             .onAppear {
                 fileManager.getGamesURL(gameSystem: gameType)
                 navigationState.currentGameSystem = gameType
-                if useiCloudSync {
-                    fileManager.syncDataToiCloud()
-                }
+                cloudSyncManager.syncDataToiCloud()
             }
             .onDisappear {
                 if gameType == navigationState.currentGameSystem {
@@ -82,9 +80,7 @@ struct GameCollectionView: View {
             }
             .refreshable {
                 fileManager.getGamesURL(gameSystem: gameType)
-                if useiCloudSync {
-                    fileManager.syncDataToiCloud()
-                }
+                cloudSyncManager.syncDataToiCloud()
             }
                 .toolbar() {
                     Button(action: { showingInfoView.toggle() }, label: {

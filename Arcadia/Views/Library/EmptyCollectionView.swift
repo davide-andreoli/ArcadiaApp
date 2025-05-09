@@ -13,9 +13,9 @@ struct EmptyCollectionView: View {
     
     @State private var gameType: ArcadiaGameType
     @Environment(ArcadiaFileManager.self) var fileManager: ArcadiaFileManager
+    @Environment(ArcadiaCloudSyncManager.self) var cloudSyncManager: ArcadiaCloudSyncManager
     @Environment(\.colorScheme) var colorScheme
-    
-    @AppStorage("iCloudSyncEnabled") private var useiCloudSync = false
+
     
     init(gameType: ArcadiaGameType) {
         self.gameType = gameType
@@ -34,9 +34,7 @@ struct EmptyCollectionView: View {
                 }
                 Button(action: {
                     fileManager.getGamesURL(gameSystem: gameType)
-                    if useiCloudSync {
-                        fileManager.syncDataToiCloud()
-                    }
+                    cloudSyncManager.syncDataToiCloud()
                 }) {
                     Text("Refresh game list")
                 }
@@ -48,9 +46,8 @@ struct EmptyCollectionView: View {
         }
         .refreshable {
             fileManager.getGamesURL(gameSystem: gameType)
-            if useiCloudSync {
-                fileManager.syncDataToiCloud()
-            }
+            cloudSyncManager.syncDataToiCloud()
+            
         }
                 
     }

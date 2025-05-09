@@ -13,6 +13,7 @@ struct StorageSettingsView: View {
     
     @AppStorage("iCloudSyncEnabled") private var useiCloudSync = false
     @Environment(ArcadiaFileManager.self) var fileManager: ArcadiaFileManager
+    @Environment(ArcadiaCloudSyncManager.self) var cloudSyncManager: ArcadiaCloudSyncManager
     
     
     var body: some View {
@@ -25,19 +26,19 @@ struct StorageSettingsView: View {
                 .onChange(of: useiCloudSync) { oldValue, newValue in
                     if newValue {
                         showOverlay = true
-                        fileManager.uploadFilesToiCloud()
+                        cloudSyncManager.uploadFilesToiCloud()
                         showOverlay = false
                     } else {
                         showOverlay = true
-                        fileManager.downloadDataFromiCloud()
+                        cloudSyncManager.downloadDataFromiCloud()
                         showOverlay = false
                     }
                 }
                 if useiCloudSync {
-                    Text("\(fileManager.lastSyncStatus.textToShow)")
+                    Text("\(cloudSyncManager.lastSyncStatus.textToShow)")
                 }
                 Button(action : {
-                    fileManager.syncDataToiCloud()
+                    cloudSyncManager.syncDataToiCloud()
                 }) {
                     Text("Force sync")
                 }
