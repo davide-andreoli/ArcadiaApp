@@ -8,7 +8,20 @@
 import Foundation
 
 enum ArcadiaCloudSyncError: Error {
+    case iCloudDisabled
+    case localFileMissing
     case error
+    
+    var description: String {
+        switch self {
+        case .error:
+            return ""
+        case .iCloudDisabled:
+            return ""
+        default:
+            return ""
+        }
+    }
 }
 
 struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
@@ -23,11 +36,11 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     
     func copyFileToCloud(file: URL) async throws {
         guard let iCloudURL = iCloudDocumentsMainDirectory else {
-            throw ArcadiaCloudSyncError.error
+            throw ArcadiaCloudSyncError.iCloudDisabled
         }
 
         if !FileManager.default.fileExists(atPath: file.path) {
-            throw ArcadiaCloudSyncError.error
+            throw ArcadiaCloudSyncError.localFileMissing
         }
 
         let iCloudSubDirectory = iCloudURL
@@ -56,7 +69,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     func downloadFileFromCloud(localFileURL: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
 
             let iCloudFileURL = iCloudURL.appendingPathComponent(localFileURL.pathComponents[localFileURL.pathComponents.index(localFileURL.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(localFileURL.pathComponents[localFileURL.pathComponents.index(localFileURL.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(localFileURL.lastPathComponent)
@@ -78,7 +91,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     func deleteFileFromCloud(file: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
 
             let iCloudFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
@@ -97,7 +110,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     func renameFileInCloud(file: URL, to newFile: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
 
                                     
@@ -122,7 +135,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     func copyFolderToCloud(folder: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
         let iCloudSubDirectory = iCloudURL
             .appendingPathComponent(folder.pathComponents[folder.pathComponents.index(folder.pathComponents.endIndex, offsetBy: -2)])
@@ -173,7 +186,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
         
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
         let iCloudSubDirectory = iCloudURL
             .appendingPathComponent(folder.pathComponents[folder.pathComponents.index(folder.pathComponents.endIndex, offsetBy: -2)])
@@ -223,7 +236,7 @@ struct ArcadiaiCloudSyncDriver: ArcadiaSyncDriverProtocol {
     func syncFolderToCloud(folder: URL) async throws {
         guard
             let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
+        else { throw ArcadiaCloudSyncError.iCloudDisabled }
         
         let iCloudSubDirectory = iCloudURL
             .appendingPathComponent(folder.pathComponents[folder.pathComponents.index(folder.pathComponents.endIndex, offsetBy: -2)])
