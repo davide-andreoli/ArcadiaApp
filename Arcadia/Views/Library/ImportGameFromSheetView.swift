@@ -51,7 +51,9 @@ struct ImportGameFromSheetView: View {
                                 }
                                 
                                 if let gameSystem = selectedGameSystem, let gameURL = ArcadiaNavigationState.shared.importedURL {
-                                    fileManager.saveGame(gameURL: gameURL, gameType: gameSystem)
+                                    Task {
+                                        await fileManager.saveGame(gameURL: gameURL, gameType: gameSystem)
+                                    }
                                     withAnimation {
                                         loadingState = .completedSuccessfully
                                     }

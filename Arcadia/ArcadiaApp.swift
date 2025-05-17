@@ -95,6 +95,7 @@ struct ArcadiaApp: App {
         //.modelContainer(sharedModelContainer)
         .environment(ArcadiaNavigationState.shared)
         .environment(ArcadiaFileManager.shared)
+        .environment(ArcadiaCloudSyncManager.shared)
         .environment(ArcadiaCoreEmulationState.sharedInstance)
         .environment(InputController.shared)
 

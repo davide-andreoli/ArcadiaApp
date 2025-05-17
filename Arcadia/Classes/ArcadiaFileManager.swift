@@ -16,31 +16,10 @@ import UIKit
 import AppKit
 #endif
 
-enum ArcadiaCloudSyncStatus {
-    case syncing
-    case completed
-    case error
-    case notExecuted
-    
-    var textToShow: String {
-        switch self {
-        case .syncing:
-            return "Sync in progress"
-        case .completed:
-            return "Sync completed"
-        case .notExecuted:
-            return "Sync not yet executed"
-        case .error:
-            return "Error during last sync"
-        }
-    }
-}
-
 @Observable class ArcadiaFileManager {
     
     public static var shared = ArcadiaFileManager()
     public var currentGames: [URL] = []
-    public var lastSyncStatus: ArcadiaCloudSyncStatus = .notExecuted
     public var showAlert: Bool = false
     
     var documentsDirectory: URL {
@@ -52,13 +31,6 @@ enum ArcadiaCloudSyncStatus {
     }
     
     var documentsMainDirectory: URL {
-        /*
-        if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-            if iCloudSyncEnabled {
-                return iCloudDocumentsDirectory!.appendingPathComponent("Arcadia")
-            }
-        }
-        */
         return documentsDirectory
         
     }
@@ -122,17 +94,21 @@ enum ArcadiaCloudSyncStatus {
                 print("Error creating folder")
             }
         }
+
+    }
+    
+    func cloudSyncSetup() async {
+        var foldersToSync = [URL]()
         
-        if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-            if iCloudSyncEnabled {
-                DispatchQueue.global(qos: .userInteractive).async {
-                    self.syncDataToiCloud(in: foldersToSync)
-                }
+        for dir in [gamesDirectory, savesDirectory, statesDirectory, imagesDirectory, coresDirectory] {
+            for gameSystem in ArcadiaGameType.allCases {
+                let gameSystemFolder = dir.appendingPathComponent(gameSystem.rawValue)
+                foldersToSync.append(gameSystemFolder)
             }
         }
-        
-        
-        
+        for folder in foldersToSync {
+            await ArcadiaCloudSyncManager.shared.syncFolderToCloud(folder: folder)
+        }
     }
     
     func getGamesURL(gameSystem: ArcadiaGameType) {
@@ -155,7 +131,7 @@ enum ArcadiaCloudSyncStatus {
         }
     }
     
-    func importSaveFile(for gameURL: URL, saveURL: URL, gameType: ArcadiaGameType, needScope: Bool = true) {
+    func importSaveFile(for gameURL: URL, saveURL: URL, gameType: ArcadiaGameType, needScope: Bool = true) async {
         if needScope {
             if gameURL.startAccessingSecurityScopedResource()  {
                 defer {
@@ -167,11 +143,7 @@ enum ArcadiaCloudSyncStatus {
                 do {
                     let saveFile = try Data(contentsOf: saveURL)
                     try saveFile.write(to: localSaveURL, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: localSaveURL)
-                        }
-                    }
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: localSaveURL)
                 } catch {
                     print("couldn't save file \(error)")
                 }
@@ -179,7 +151,7 @@ enum ArcadiaCloudSyncStatus {
         }
     }
     
-    func saveGame(gameURL: URL, gameType: ArcadiaGameType, fromSheet: Bool = false) {
+    func saveGame(gameURL: URL, gameType: ArcadiaGameType, fromSheet: Bool = false) async {
 
             if gameURL.startAccessingSecurityScopedResource()  {
                 print("entering the scoping")
@@ -194,23 +166,12 @@ enum ArcadiaCloudSyncStatus {
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: savePath)
-                        }
-                    }
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+                    
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
-                        downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                            DispatchQueue.main.async {
-                                if let error = error {
-                                    print("Error: \(error.localizedDescription)")
-                                } else {
-                                    print("Image saved successfully")
-                                }
-                            }
-                        }
+                        try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
                     }
                     //To update the game list
                     getGamesURL(gameSystem: gameType)
@@ -226,23 +187,12 @@ enum ArcadiaCloudSyncStatus {
                     let savePath = self.gamesDirectory.appendingPathComponent(gameType.rawValue).appendingPathComponent(gameURL.lastPathComponent)
                     try FileManager.default.createDirectory(at: self.gamesDirectory.appendingPathComponent(gameType.rawValue), withIntermediateDirectories: true)
                     try romFile.write(to: savePath, options: .atomic)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            createCloudCopy(of: savePath)
-                        }
-                    }
+                    await ArcadiaCloudSyncManager.shared.createCloudCopy(of: savePath)
+
                     if let boxArtPath = getGameFromURL(gameURL: gameURL) {
                         guard let boxArtURL = URL(string: boxArtPath) else { return }
                         print("Got boxULR :\(boxArtURL)")
-                        downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                            DispatchQueue.main.async {
-                                if let error = error {
-                                    print("Error: \(error.localizedDescription)")
-                                } else {
-                                    print("Image saved successfully")
-                                }
-                            }
-                        }
+                        try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
                     }
                     //To update the game list
                     if let currentGameSystem = ArcadiaNavigationState.shared.currentGameSystem {
@@ -261,13 +211,13 @@ enum ArcadiaCloudSyncStatus {
 
     }
     
-    func importGameFromShare(gameURL : URL) {
+    func importGameFromShare(gameURL : URL) async {
         print(gameURL)
         let gameExtension = gameURL.pathExtension
         
         for gameType in ArcadiaGameType.allCases {
             if gameType.allowedExtensions.contains(UTType(filenameExtension: gameExtension)!) {
-                self.saveGame(gameURL: gameURL, gameType: gameType)
+                await self.saveGame(gameURL: gameURL, gameType: gameType)
                 self.showAlert = true
             }
         }
@@ -339,23 +289,20 @@ enum ArcadiaCloudSyncStatus {
 
     }
     
-    func redownloadDefaultImage(gameURL: URL, gameType: ArcadiaGameType) {
+    func redownloadDefaultImage(gameURL: URL, gameType: ArcadiaGameType) async {
         if let boxArtPath = getGameFromURL(gameURL: gameURL) {
             guard let boxArtURL = URL(string: boxArtPath) else { return }
             print("Got boxULR :\(boxArtURL)")
-            downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType) { error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        print("Error: \(error.localizedDescription)")
-                    } else {
-                        print("Image saved successfully")
-                    }
-                }
+            do {
+                try await downloadAndProcessImage(of: gameURL, from: boxArtURL, gameType: gameType)
+            }
+            catch {
+                
             }
         }
     }
     
-    func deleteGame(gameURL: URL, gameType: ArcadiaGameType) {
+    func deleteGame(gameURL: URL, gameType: ArcadiaGameType) async {
         let imageURL = getImageURL(gameURL: gameURL, gameType: gameType)
         let saveURL = getSaveURL(gameURL: gameURL, gameType: gameType)
         let stateURL1 = getStateURL(gameURL: gameURL, gameType: gameType, slot: 1)
@@ -366,11 +313,7 @@ enum ArcadiaCloudSyncStatus {
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 do {
                     try FileManager.default.removeItem(atPath: fileURL.path)
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            deleteCloudCopy(of: fileURL)
-                        }
-                    }
+                    await ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: fileURL)
                 } catch {
                     print("Could not delete")
                 }
@@ -380,11 +323,7 @@ enum ArcadiaCloudSyncStatus {
         if FileManager.default.fileExists(atPath: gameURL.path) {
             do {
                 try FileManager.default.removeItem(atPath: gameURL.path)
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        deleteCloudCopy(of: gameURL)
-                    }
-                }
+                await ArcadiaCloudSyncManager.shared.deleteCloudCopy(of: gameURL)
             } catch {
                 print("Could not delete")
             }
@@ -430,7 +369,7 @@ enum ArcadiaCloudSyncStatus {
 
     }
     
-    func renameGame(gameURL: URL, newName: String, gameType: ArcadiaGameType) {
+    func renameGame(gameURL: URL, newName: String, gameType: ArcadiaGameType) async {
         let imageURL = getImageURL(gameURL: gameURL, gameType: gameType)
         let saveURL = getSaveURL(gameURL: gameURL, gameType: gameType)
         let stateURL1 = getStateURL(gameURL: gameURL, gameType: gameType, slot: 1)
@@ -452,11 +391,8 @@ enum ArcadiaCloudSyncStatus {
                     print("Renaming \(oldURL.lastPathComponent) to \(newURL.lastPathComponent)")
                     try FileManager.default.moveItem(at: oldURL, to: newURL)
                     
-                    if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                        if iCloudSyncEnabled {
-                            self.renameCloudCopy(of: oldURL, to: newURL)
-                        }
-                    }
+                    await ArcadiaCloudSyncManager.shared.renameFileInCloud(file: oldURL, to: newURL)
+
                     
                 } catch {
                     print("Could not rename \(oldURL.lastPathComponent) to \(newURL.lastPathComponent)")
@@ -468,12 +404,8 @@ enum ArcadiaCloudSyncStatus {
             do {
                 print("Renaming \(gameURL.lastPathComponent) to \(newGameURL.lastPathComponent)")
                 try FileManager.default.moveItem(at: gameURL, to: newGameURL)
-                
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        self.renameCloudCopy(of: gameURL, to: newGameURL)
-                    }
-                }
+                await ArcadiaCloudSyncManager.shared.renameFileInCloud(file: gameURL, to: newGameURL)
+
                 
             } catch {
                 print("Could not rename \(gameURL.lastPathComponent) to \(newGameURL.lastPathComponent)")
@@ -614,66 +546,54 @@ enum ArcadiaCloudSyncStatus {
        }
     
     
-    func downloadAndProcessImage(of gameURL: URL, from imageURL: URL, gameType: ArcadiaGameType, completion: @escaping (Error?) -> Void) {
-        
+    func downloadAndProcessImage(of gameURL: URL, from imageURL: URL, gameType: ArcadiaGameType) async throws {
         print("Trying to download from \(imageURL)")
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            if let error = error {
-                completion(error)
-                return
-            }
-            
-            print("Downloaded from \(imageURL)")
-            guard let data = data else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
-                return
-            }
-            
-            #if os(iOS)
-            guard let image = UIImage(data: data) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Unable to create image from data"]))
-                return
-            }
-            #elseif os(macOS)
-            guard let image = NSImage(data: data) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Unable to create image from data"]))
-                return
-            }
-            #endif
-            
-            let imageFileName = self.getImageURL(gameURL: gameURL, gameType: gameType)
-            
-            let resizedImage = self.resizeImage(image: image, toMaxDimension: 80)
-            print("Resized image")
-            
-            #if os(iOS)
-            guard let jpegData = resizedImage.jpegData(compressionQuality: 1.0) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Unable to convert image to JPEG"]))
-                return
-            }
-            #elseif os(macOS)
-            guard let tiffData = resizedImage.tiffRepresentation,
-                  let bitmap = NSBitmapImageRep(data: tiffData),
-                  let jpegData = bitmap.representation(using: .jpeg, properties: [:]) else {
-                completion(NSError(domain: "ImageProcessingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Unable to convert image to JPEG"]))
-                return
-            }
-            #endif
-            
-            do {
-                print("Writing to \(imageFileName)")
-                try jpegData.write(to: imageFileName)
-                if let iCloudSyncEnabled = UserDefaults.standard.object(forKey: "iCloudSyncEnabled") as? Bool {
-                    if iCloudSyncEnabled {
-                        self.createCloudCopy(of: imageFileName)
-                    }
-                }
-                completion(nil)
-            } catch {
-                completion(error)
-            }
-        }.resume()
+        
+        let (data, _) = try await URLSession.shared.data(from: imageURL)
+        
+        print("Downloaded from \(imageURL)")
+        
+        #if os(iOS)
+        guard let image = UIImage(data: data) else {
+            throw NSError(domain: "ImageProcessingError", code: 1001, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to create image from data"
+            ])
+        }
+        #elseif os(macOS)
+        guard let image = NSImage(data: data) else {
+            throw NSError(domain: "ImageProcessingError", code: 1001, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to create image from data"
+            ])
+        }
+        #endif
+
+        let imageFileName = self.getImageURL(gameURL: gameURL, gameType: gameType)
+        
+        let resizedImage = self.resizeImage(image: image, toMaxDimension: 80)
+        print("Resized image")
+        
+        #if os(iOS)
+        guard let jpegData = resizedImage.jpegData(compressionQuality: 1.0) else {
+            throw NSError(domain: "ImageProcessingError", code: 1002, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to convert image to JPEG"
+            ])
+        }
+        #elseif os(macOS)
+        guard let tiffData = resizedImage.tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiffData),
+              let jpegData = bitmap.representation(using: .jpeg, properties: [:]) else {
+            throw NSError(domain: "ImageProcessingError", code: 1002, userInfo: [
+                NSLocalizedDescriptionKey: "Unable to convert image to JPEG"
+            ])
+        }
+        #endif
+
+        print("Writing to \(imageFileName)")
+        try jpegData.write(to: imageFileName)
+        
+        await ArcadiaCloudSyncManager.shared.createCloudCopy(of: imageFileName)
     }
+
 
     #if os(iOS)
     func resizeImage(image: UIImage, toMaxDimension maxDimension: CGFloat) -> UIImage {
@@ -735,328 +655,5 @@ enum ArcadiaCloudSyncStatus {
         return self.coresDirectory.appendingPathComponent(gameSystem.rawValue)
     }
                     
-    func uploadFilesToiCloud() {
-        var localURLs = [URL]()
-        for gameSystem in ArcadiaGameType.allCases {
-            localURLs.append(getGameDirectory(for: gameSystem))
-            localURLs.append(getSaveDirectory(for: gameSystem))
-            localURLs.append(getStateDirectory(for: gameSystem))
-            localURLs.append(getImageDirectory(for: gameSystem))
-            localURLs.append(getCoreDirectory(for: gameSystem))
-        }
 
-        uploadFilesToiCloud(in: localURLs)
-        
-    }
-    
-    func uploadFilesToiCloud(in folders: [URL]) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-
-        for localURL in folders {
-            let iCloudSubDirectory = iCloudURL
-                .appendingPathComponent(localURL.pathComponents[localURL.pathComponents.index(localURL.pathComponents.endIndex, offsetBy: -2)])
-                .appendingPathComponent(localURL.lastPathComponent)
-
-            do {
-                try FileManager.default.createDirectory(at: iCloudSubDirectory, withIntermediateDirectories: true, attributes: nil)
-
-                let localContents = try FileManager.default.contentsOfDirectory(at: localURL, includingPropertiesForKeys: [.contentModificationDateKey])
-                let iCloudContents = try FileManager.default.contentsOfDirectory(at: iCloudSubDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
-
-                // Create a dictionary of iCloud files
-                var iCloudFilesDict = [String: URL]()
-                for iCloudFile in iCloudContents {
-                    iCloudFilesDict[iCloudFile.lastPathComponent] = iCloudFile
-                }
-
-                // Sync local files to iCloud
-                for localFile in localContents {
-                    let iCloudFile = iCloudSubDirectory.appendingPathComponent(localFile.lastPathComponent)
-
-                    if let iCloudFile = iCloudFilesDict[localFile.lastPathComponent] {
-                        // Compare modification dates
-                        let localAttributes = try FileManager.default.attributesOfItem(atPath: localFile.path)
-                        let iCloudAttributes = try FileManager.default.attributesOfItem(atPath: iCloudFile.path)
-
-                        if let localDate = localAttributes[.modificationDate] as? Date,
-                           let iCloudDate = iCloudAttributes[.modificationDate] as? Date {
-                            if localDate > iCloudDate {
-                                // Local file is more recent, copy to iCloud
-                                print("Copying local file to iCloud \(iCloudFile)")
-                                try FileManager.default.removeItem(at: iCloudFile)
-                                try FileManager.default.copyItem(at: localFile, to: iCloudFile)
-                            }
-                        }
-                    } else {
-                        // iCloud file doesn't exist, copy local file to iCloud
-                        print("Copying local file to iCloud \(iCloudFile)")
-                        try FileManager.default.copyItem(at: localFile, to: iCloudFile)
-                    }
-                }
-            } catch {
-                print("Error syncing data to iCloud: \(error)")
-            }
-        }
-    }
-    
-    func downloadDataFromiCloud() {
-        var localURLs = [URL]()
-        for gameSystem in ArcadiaGameType.allCases {
-            localURLs.append(getGameDirectory(for: gameSystem))
-            localURLs.append(getSaveDirectory(for: gameSystem))
-            localURLs.append(getStateDirectory(for: gameSystem))
-            localURLs.append(getImageDirectory(for: gameSystem))
-            localURLs.append(getCoreDirectory(for: gameSystem))
-        }
-
-        downloadDataFromiCloud(in: localURLs)
-        
-    }
-    
-    func downloadDataFromiCloud(in folders: [URL]) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-
-        for localURL in folders {
-            let iCloudSubDirectory = iCloudURL
-                .appendingPathComponent(localURL.pathComponents[localURL.pathComponents.index(localURL.pathComponents.endIndex, offsetBy: -2)])
-                .appendingPathComponent(localURL.lastPathComponent)
-
-            do {
-                try FileManager.default.createDirectory(at: localURL, withIntermediateDirectories: true, attributes: nil)
-
-                let localContents = try FileManager.default.contentsOfDirectory(at: localURL, includingPropertiesForKeys: [.contentModificationDateKey])
-                let iCloudContents = try FileManager.default.contentsOfDirectory(at: iCloudSubDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
-
-                // Create a dictionary of local files
-                var localFilesDict = [String: URL]()
-                for localFile in localContents {
-                    localFilesDict[localFile.lastPathComponent] = localFile
-                }
-
-                // Sync iCloud files to local
-                for iCloudFile in iCloudContents {
-                    let localFile = localURL.appendingPathComponent(iCloudFile.lastPathComponent)
-
-                    if let localFile = localFilesDict[iCloudFile.lastPathComponent] {
-                        // Compare modification dates
-                        let localAttributes = try FileManager.default.attributesOfItem(atPath: localFile.path)
-                        let iCloudAttributes = try FileManager.default.attributesOfItem(atPath: iCloudFile.path)
-
-                        if let localDate = localAttributes[.modificationDate] as? Date,
-                           let iCloudDate = iCloudAttributes[.modificationDate] as? Date {
-                            if iCloudDate > localDate {
-                                // iCloud file is more recent, copy to local
-                                print("Copying iCloud file to local \(localFile)")
-                                try FileManager.default.removeItem(at: localFile)
-                                try FileManager.default.copyItem(at: iCloudFile, to: localFile)
-                            }
-                        }
-                    } else {
-                        // Local file doesn't exist, copy iCloud file to local
-                        print("Copying iCloud file to local \(localFile)")
-                        try FileManager.default.copyItem(at: iCloudFile, to: localFile)
-                    }
-                }
-            } catch {
-                print("Error syncing data from iCloud: \(error)")
-            }
-        }
-    }
-    
-    func syncDataToiCloud() {
-        var localURLs = [URL]()
-        for gameSystem in ArcadiaGameType.allCases {
-            localURLs.append(getGameDirectory(for: gameSystem))
-            localURLs.append(getSaveDirectory(for: gameSystem))
-            localURLs.append(getStateDirectory(for: gameSystem))
-            localURLs.append(getImageDirectory(for: gameSystem))
-            localURLs.append(getCoreDirectory(for: gameSystem))
-        }
-
-        syncDataToiCloud(in: localURLs)
-        
-    }
-
-
-            
-    func syncDataToiCloud(in folders: [URL]) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-        lastSyncStatus = .syncing
-        
-        let localURLs = folders
-        for localURL in localURLs {
-            let iCloudSubDirectory = iCloudURL
-                .appendingPathComponent(localURL.pathComponents[localURL.pathComponents.index(localURL.pathComponents.endIndex, offsetBy: -2)])
-                .appendingPathComponent(localURL.lastPathComponent)
-            do {
-                try FileManager.default.createDirectory(at: iCloudSubDirectory, withIntermediateDirectories: true, attributes: nil)
-  
-                let localContents = try FileManager.default.contentsOfDirectory(at: localURL, includingPropertiesForKeys: [.contentModificationDateKey])
-                let iCloudContents = try FileManager.default.contentsOfDirectory(at: iCloudSubDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
-                
-                // Create a dictionary of local files
-                var localFilesDict = [String: URL]()
-                for localFile in localContents {
-                    localFilesDict[localFile.lastPathComponent] = localFile
-                }
-
-                // Create a dictionary of iCloud files
-                var iCloudFilesDict = [String: URL]()
-                for iCloudFile in iCloudContents {
-                    iCloudFilesDict[iCloudFile.lastPathComponent] = iCloudFile
-                }
-
-                // Sync files
-                for localFile in localContents {
-                    let iCloudFile = iCloudSubDirectory.appendingPathComponent(localFile.lastPathComponent)
-               
-                    if let iCloudFile = iCloudFilesDict[localFile.lastPathComponent] {
-                        // Compare modification dates
-                        let localAttributes = try FileManager.default.attributesOfItem(atPath: localFile.path)
-                        let iCloudAttributes = try FileManager.default.attributesOfItem(atPath: iCloudFile.path)
-                        
-                        if let localDate = localAttributes[.modificationDate] as? Date,
-                           let iCloudDate = iCloudAttributes[.modificationDate] as? Date {
-                            if localDate > iCloudDate {
-                                // Local file is more recent, copy to iCloud
-                                print("Copying local file to iCloud \(iCloudFile)")
-                                try FileManager.default.removeItem(at: iCloudFile)
-                                try FileManager.default.copyItem(at: localFile, to: iCloudFile)
-                            } else if iCloudDate > localDate {
-                                // iCloud file is more recent, copy to local
-                                print("Copying iCloud file to local \(iCloudFile)")
-                                try FileManager.default.removeItem(at: localFile)
-                                try FileManager.default.copyItem(at: iCloudFile, to: localFile)
-                            }
-                        }
-                    } else {
-                        // iCloud file doesn't exist, copy local file to iCloud
-                            //print("Copying local file to iCloud \(iCloudFile)")
-                            //try FileManager.default.copyItem(at: localFile, to: iCloudFile)
-
-                    }
-                }
-
-                // Copy files from iCloud to local if they don't exist locally
-                for iCloudFile in iCloudContents {
-                    if localFilesDict[iCloudFile.lastPathComponent] == nil {
-                        let localFile = localURL.appendingPathComponent(iCloudFile.lastPathComponent)
-                        print("Copying iCloud file to local \(localFile)")
-                        try FileManager.default.copyItem(at: iCloudFile, to: localFile)
-                    }
-                }
-                
-                
-                // Delete local files that do not exist in iCloud
-                for localFile in localContents {
-                    if iCloudFilesDict[localFile.lastPathComponent] == nil {
-                        print("Deleting local file \(localFile.lastPathComponent) because it doesn't exist in iCloud")
-                        try FileManager.default.removeItem(at: localFile)
-                    }
-                }
-                
-            } catch {
-                lastSyncStatus = .error
-                print("Error syncing data to iCloud: \(error)")
-            }
-        }
-        lastSyncStatus = .completed
-    }
-    
-    func deleteCloudCopy(of file: URL) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            let iCloudFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
-            print(iCloudFileURL)
-            
-            if FileManager.default.fileExists(atPath: iCloudFileURL.path) {
-                do {
-                    try FileManager.default.removeItem(at: iCloudFileURL)
-                } catch {
-                    print("Could not delete")
-                }
-            }
-        }
-        
-        
-    }
-    
-    func createCloudCopy(of file: URL) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            
-            if !FileManager.default.fileExists(atPath: file.path) {
-                return
-            }
-            
-            let iCloudSubDirectory = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)])
-            
-            let iCloudFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
-            
-            
-            do {
-                try FileManager.default.createDirectory(at: iCloudSubDirectory, withIntermediateDirectories: true, attributes: nil)
-                
-                if FileManager.default.fileExists(atPath: iCloudFileURL.path) {
-                    let localAttributes = try FileManager.default.attributesOfItem(atPath: file.path)
-                    let iCloudAttributes = try FileManager.default.attributesOfItem(atPath: iCloudFileURL.path)
-                    
-                    if let localDate = localAttributes[.modificationDate] as? Date,
-                       let iCloudDate = iCloudAttributes[.modificationDate] as? Date {
-                        if iCloudDate > localDate {
-                            print("Local file is less recent, skipping")
-                            return
-                        } else {
-                            try FileManager.default.removeItem(at: iCloudFileURL)
-                        }
-                    }
-                }
-                try FileManager.default.copyItem(at: file, to: iCloudFileURL)
-            } catch {
-                print("Could not copy \(error)")
-            }
-        }
-
-    }
-    
-    func renameCloudCopy(of file: URL, to newFile: URL) {
-        guard
-            let iCloudURL = iCloudDocumentsMainDirectory
-        else { return }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-                                    
-            let iCloudOldFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(file.lastPathComponent)
-            
-            let iCloudNewFileURL = iCloudURL.appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -3)]).appendingPathComponent(file.pathComponents[file.pathComponents.index(file.pathComponents.endIndex, offsetBy: -2)]).appendingPathComponent(newFile.lastPathComponent)
-            
-            if !FileManager.default.fileExists(atPath: iCloudOldFileURL.path) {
-                return
-            }
-            
-            do {
-                print("Cloud renaming \(iCloudOldFileURL.lastPathComponent) to \(iCloudNewFileURL.lastPathComponent)")
-                try FileManager.default.moveItem(at: iCloudOldFileURL, to: iCloudNewFileURL)
-                
-            } catch {
-                print("Could not rename \(error)")
-            }
-        }
-        
-    }
-    
-
-    
 }

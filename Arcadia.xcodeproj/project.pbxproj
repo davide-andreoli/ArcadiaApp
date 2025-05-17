@@ -26,6 +26,10 @@
 		9528F7802BF4B97800E2CEC6 /* CurrentBufferMetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9528F77F2BF4B97800E2CEC6 /* CurrentBufferMetalRenderer.swift */; };
 		9528F7872BF4E52400E2CEC6 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9528F7862BF4E52400E2CEC6 /* InputController.swift */; };
 		952C3A7D2C0BDC5C00DF2832 /* openvgdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 952C3A7C2C0BDC5B00DF2832 /* openvgdb.sqlite */; };
+		953DE99E2DCBDB4200A0C105 /* ArcadiaSyncDriverProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DE99D2DCBDB2F00A0C105 /* ArcadiaSyncDriverProtocol.swift */; };
+		953DE9A22DCE024600A0C105 /* ArcadiaiCloudSyncDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DE9A12DCE023F00A0C105 /* ArcadiaiCloudSyncDriver.swift */; };
+		953DE9A42DCE027A00A0C105 /* ArcadiaCloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DE9A32DCE027400A0C105 /* ArcadiaCloudSyncManager.swift */; };
+		953DE9A62DCE029F00A0C105 /* ArcadiaCloudSyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DE9A52DCE029900A0C105 /* ArcadiaCloudSyncStatus.swift */; };
 		95456BB62BE2ACA900113B8A /* ArcadiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95456BB52BE2ACA900113B8A /* ArcadiaApp.swift */; };
 		95456BB82BE2ACA900113B8A /* RunGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95456BB72BE2ACA900113B8A /* RunGameView.swift */; };
 		95456BBA2BE2ACA900113B8A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95456BB92BE2ACA900113B8A /* Item.swift */; };
@@ -173,6 +177,10 @@
 		952C3A7C2C0BDC5B00DF2832 /* openvgdb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = openvgdb.sqlite; sourceTree = "<group>"; };
 		952C5E9B2C108F8C00DF2832 /* ArcadiaGBACore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ArcadiaGBACore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		952CF6812C0724C200DF2832 /* ArcadiaNESCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ArcadiaNESCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		953DE99D2DCBDB2F00A0C105 /* ArcadiaSyncDriverProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaSyncDriverProtocol.swift; sourceTree = "<group>"; };
+		953DE9A12DCE023F00A0C105 /* ArcadiaiCloudSyncDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaiCloudSyncDriver.swift; sourceTree = "<group>"; };
+		953DE9A32DCE027400A0C105 /* ArcadiaCloudSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaCloudSyncManager.swift; sourceTree = "<group>"; };
+		953DE9A52DCE029900A0C105 /* ArcadiaCloudSyncStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaCloudSyncStatus.swift; sourceTree = "<group>"; };
 		95456BB22BE2ACA900113B8A /* Arcadia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Arcadia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95456BB52BE2ACA900113B8A /* ArcadiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcadiaApp.swift; sourceTree = "<group>"; };
 		95456BB72BE2ACA900113B8A /* RunGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunGameView.swift; sourceTree = "<group>"; };
@@ -352,6 +360,32 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		953DE99C2DCBDB2600A0C105 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		953DE99F2DCE01DF00A0C105 /* Cloud Sync */ = {
+			isa = PBXGroup;
+			children = (
+				953DE9A52DCE029900A0C105 /* ArcadiaCloudSyncStatus.swift */,
+				953DE9A32DCE027400A0C105 /* ArcadiaCloudSyncManager.swift */,
+				953DE9A02DCE023100A0C105 /* Drivers */,
+				953DE99D2DCBDB2F00A0C105 /* ArcadiaSyncDriverProtocol.swift */,
+			);
+			path = "Cloud Sync";
+			sourceTree = "<group>";
+		};
+		953DE9A02DCE023100A0C105 /* Drivers */ = {
+			isa = PBXGroup;
+			children = (
+				953DE9A12DCE023F00A0C105 /* ArcadiaiCloudSyncDriver.swift */,
+			);
+			path = Drivers;
+			sourceTree = "<group>";
+		};
 		95456BA92BE2ACA900113B8A = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +417,8 @@
 		95456BB42BE2ACA900113B8A /* Arcadia */ = {
 			isa = PBXGroup;
 			children = (
+				953DE99F2DCE01DF00A0C105 /* Cloud Sync */,
+				953DE99C2DCBDB2600A0C105 /* Protocols */,
 				95E005712CB2F2E800C66D56 /* Extensions */,
 				95FAC8672C7CDD4B0071DC12 /* MLModels */,
 				95F0200F2C25EA060087DAC2 /* Info.plist */,
@@ -751,6 +787,7 @@
 				9510FE202C61FE5300F01C88 /* ArcadiaButtonLayout.swift in Sources */,
 				95E005752CB2F35E00C66D56 /* Color+Extensions.swift in Sources */,
 				95D794FC2C949EB400C2BA8D /* ArcadiaNavigationState.swift in Sources */,
+				953DE9A62DCE029F00A0C105 /* ArcadiaCloudSyncStatus.swift in Sources */,
 				951097852C518C8E00F01C88 /* RecommendationView.swift in Sources */,
 				9510FE272C62480300F01C88 /* EmptyButtonView.swift in Sources */,
 				956F84082BEA8B9B0025FC5F /* ArcadiaFileManager.swift in Sources */,
@@ -781,8 +818,11 @@
 				955CC3842BF7E63F00C930ED /* CapsuleButtonView.swift in Sources */,
 				95D795062C98A00E00C2BA8D /* AudioSettingsView.swift in Sources */,
 				956F83FB2BEA67380025FC5F /* GameLibraryView.swift in Sources */,
+				953DE9A42DCE027A00A0C105 /* ArcadiaCloudSyncManager.swift in Sources */,
 				956F84272BF4846C0025FC5F /* Shaders.metal in Sources */,
 				95707CB32BFF148B00217B82 /* GCVirtualControllerView.swift in Sources */,
+				953DE99E2DCBDB4200A0C105 /* ArcadiaSyncDriverProtocol.swift in Sources */,
+				953DE9A22DCE024600A0C105 /* ArcadiaiCloudSyncDriver.swift in Sources */,
 				95E3C4842C7F18FB0060AC81 /* DiscoverGameDetailView.swift in Sources */,
 				955CC3792BF7E43400C930ED /* DPadButtonView.swift in Sources */,
 				9528F7872BF4E52400E2CEC6 /* InputController.swift in Sources */,
