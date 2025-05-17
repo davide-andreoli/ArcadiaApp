@@ -5,6 +5,10 @@
 - Fixed the Document Folder having one additional level (e.g. Documents/Arcadia)
 - Renamed the App to Arcadia as is not anymore on the App Store
 
+## Refactor
+
+- Refactored Cloud Sync code so that it should be easier to add support for other cloud sync backends now that the App is not on the App Store
+
 # 1.6
 
 ## Features
