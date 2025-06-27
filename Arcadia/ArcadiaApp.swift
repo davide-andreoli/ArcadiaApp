@@ -105,6 +105,7 @@ struct ArcadiaApp: App {
                 .environment(InputController.shared)
                 .environment(ArcadiaFileManager.shared)
                 .environment(ArcadiaCoreEmulationState.sharedInstance)
+                .environment(ArcadiaCloudSyncManager.shared)
         }
         .windowResizability(.contentMinSize)
         Window("Featured Games", id: "featured-games") {
